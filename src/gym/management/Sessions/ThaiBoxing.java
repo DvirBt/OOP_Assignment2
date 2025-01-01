@@ -1,6 +1,9 @@
 package gym.management.Sessions;
 
-public class ThaiBoxing extends SessionType{
+/**
+ * This class represents the Thai Boxing session type.
+ */
+public class ThaiBoxing extends SessionType {
 
     public ThaiBoxing()
     {

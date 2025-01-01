@@ -1,6 +1,9 @@
 package gym.management.Sessions;
 
-public class MachinePilates extends SessionType{
+/**
+ * This class represents the Machine Pilates session type.
+ */
+public class MachinePilates extends SessionType {
 
     public MachinePilates()
     {

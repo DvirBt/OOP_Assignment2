@@ -75,19 +75,19 @@ public class Main {
         }
 
         gymSecretary.registerClientToLesson(c1, s1);
-        //gymSecretary.registerClientToLesson(c1, s2); // is it possible to register to different lessons?
+        gymSecretary.registerClientToLesson(c1, s2);
         gymSecretary.registerClientToLesson(c1, s4);
         gymSecretary.registerClientToLesson(c4, s4);
-        //gymSecretary.registerClientToLesson(c1, s3);
-        //gymSecretary.registerClientToLesson(c5, s2);
-        //gymSecretary.registerClientToLesson(c5, s2);
+        gymSecretary.registerClientToLesson(c1, s3);
+        gymSecretary.registerClientToLesson(c5, s2);
+        gymSecretary.registerClientToLesson(c5, s2);
 
         gymSecretary.registerClientToLesson(c1, s5);
         gymSecretary.registerClientToLesson(c2, s5);
         gymSecretary.registerClientToLesson(c3, s5);
         gymSecretary.registerClientToLesson(c4, s5);
         gymSecretary.registerClientToLesson(c6, s5);
-        //gymSecretary.registerClientToLesson(c7, s5);
+        gymSecretary.registerClientToLesson(c7, s5);
 
 
         try{
@@ -128,4 +128,7 @@ public class Main {
 
         System.out.print(gym);
     }
+
+
+
 }

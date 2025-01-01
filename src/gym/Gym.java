@@ -1,24 +1,19 @@
 package gym;
 
+/**
+ * This class represents the Gym.
+ * Only one instance of gym can be created - singleton.
+ */
+
 import gym.customers.Client;
 import gym.customers.Person;
-import gym.management.*;
+import gym.management.Secretary;
 import gym.management.Sessions.Instructor;
 import gym.management.Sessions.Session;
-import gym.management.Sessions.SessionType;
 
 import java.util.ArrayList;
 
 public class Gym {
-
-    /*
-        TODO:
-            1. Add history
-            2. Add former secretaries
-            3. Add a function that makes sure the current secretary is the one with permissions
-            4. Add currentDate function to calculate age
-            5. Add print function
-     */
 
     // Singleton - only one appearance is required
     private final static Gym gym = new Gym();
@@ -86,7 +81,6 @@ public class Gym {
 
         secretary =  Secretary.getInstance(person, salary);
         String print = "A new secretary has started working at the gym: " + secretary.getName();
-        System.out.println(print);
         history.add(print);
     }
 
@@ -153,14 +147,6 @@ public class Gym {
     public void addHistory(String history)
     {
         this.history.add(history);
-    }
-
-    public Secretary getLastSecretary()
-    {
-        if (formerSecretaries.isEmpty())
-            return null;
-
-        return formerSecretaries.getLast();
     }
 
     public void addClient(Client client)

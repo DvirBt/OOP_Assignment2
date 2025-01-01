@@ -3,6 +3,9 @@ import gym.customers.Person;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents an Instructor in the Gym.
+ */
 public class Instructor extends Person {
 
     private int salary;
@@ -16,6 +19,7 @@ public class Instructor extends Person {
         this.types.addAll(types);
     }
 
+    // Getters and Setters
     public int getSalary()
     {
         return this.salary;
@@ -37,6 +41,9 @@ public class Instructor extends Person {
         this.types.addAll(types);
     }
 
+    /**
+     * This function pays the instructor by adding his current salary to his balance.
+     */
     public void paySalary()
     {
         setBalance(getBalance() + salary);

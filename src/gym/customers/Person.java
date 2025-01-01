@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.time.LocalDate;
 import java.time.Month;
 
+/**
+ * This class represent a Person with basic properties.
+ */
+
 public class Person {
 
     private static int ID = 1111;
@@ -69,25 +73,10 @@ public class Person {
         return this.birthday;
     }
 
-    private Month getMonth(int month)
-    {
-        switch (month)
-        {
-            case 1: return Month.JANUARY;
-            case 2: return Month.FEBRUARY;
-            case 3: return Month.MARCH;
-            case 4: return Month.APRIL;
-            case 5: return Month.MAY;
-            case 6: return Month.JUNE;
-            case 7: return Month.JULY;
-            case 8: return Month.AUGUST;
-            case 9: return Month.SEPTEMBER;
-            case 10: return Month.OCTOBER;
-            case 11: return Month.NOVEMBER;
-            case 12: return Month.DECEMBER;
-            default: return null;
-        }
-    }
+    /**
+     * This function calculates and returns the person's age.
+     * @return the age of the person relate to this day.
+     */
     public int getAge()
     {
         LocalDate localDate = LocalDate.now();
@@ -100,15 +89,5 @@ public class Person {
             age += 1;
 
         return age;
-
-        //Month monthOfBirth = getMonth(month);
-        //Date dateOfBirth = new Date(year, month, day); // month -> monthOfBirth
-
-
-        //return (2024 - Integer.parseInt(this.getBirthday().substring(5,9)));
     }
-
-
-    // Secretary functions
-
 }

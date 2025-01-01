@@ -1,5 +1,8 @@
 package gym.customers;
 
+/**
+ * This enum class represents the gender types.
+ */
 public enum Gender {
     Male("Male"),
     Female("Female");

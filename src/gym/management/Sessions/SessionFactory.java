@@ -1,19 +1,30 @@
 package gym.management.Sessions;
 
+/**
+ * This class represents a Factory of SessionTypes.
+ */
 public class SessionFactory {
 
+    // Properties
     private SessionType sessionType;
+
+    // Constructor
     public SessionFactory()
     {
         sessionType = null;
     }
 
+    /**
+     * This function gets a String and returns the session type related to the String.
+     * @param sessionType - a String.
+     * @return a session type according to the given String if one's exists. Otherwise, returns null.
+     */
     public SessionType createSessionType(String sessionType)
     {
         switch (sessionType)
         {
             case SessionType.Pilates:
-                this.sessionType = new PilatesSession();
+                this.sessionType = new Pilates();
                 break;
 
             case SessionType.MachinePilates:
@@ -26,20 +37,12 @@ public class SessionFactory {
 
             case SessionType.Ninja:
                 this.sessionType = new Ninja();
+                break;
 
             default: // null
+                this.sessionType = null;
         }
 
         return this.sessionType;
     }
-
-    /* TODO:
-        1. add exception to instructor and session type
-        2. add
-     */
-
-//    public Session createSession(String sessionType, String date, ForumType forumType, Instructor instructor)
-//    {
-//        return createSessionType(sessionType); // get the session type
-//    }
 }

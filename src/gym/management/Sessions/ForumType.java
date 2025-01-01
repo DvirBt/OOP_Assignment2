@@ -1,5 +1,8 @@
 package gym.management.Sessions;
 
+/**
+ * This enum represents the forum types.
+ */
 import gym.Gym;
 import gym.customers.Client;
 
@@ -21,6 +24,8 @@ public enum ForumType {
     {
         return this.audience;
     }
+
+    // What the fuck did i do here? for what reason lol
     private ArrayList<Client> createList(ForumType forumType)
     {
         ArrayList<Client> all = Gym.getInstance().getClients();
