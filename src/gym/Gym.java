@@ -200,6 +200,11 @@ public class Gym {
                             toString += currentInstructor.getTypes().get(j) + ", ";
                     }
         }
+        // add secretary
+        toString += "ID: " + secretary.getId() + " | Name: " + currentSecretary.getName() + " | Gender: " + currentSecretary.getGender().name() +
+                " | Birthday: " + currentSecretary.getBirthday() + " | Age: " + currentSecretary.getAge() +
+                " | Balance: " + currentSecretary.getBalance() + " | Role: Secretary | Salary per Month: " + currentSecretary.getSalary() + "\n";
+
 
         // Session Type: Pilates | Date: 23-01-2025 10:00 | Forum: All | Instructor: Yuval | Participants: 1/30
         toString += "\nSessions Data:\n";

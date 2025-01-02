@@ -37,7 +37,7 @@ public class Client extends Person {
     public void update(String message)
     {
         //System.out.println(message);
-        notifications += message + ",";
+        notifications += message + ", ";
     }
 
     /**
@@ -47,7 +47,7 @@ public class Client extends Person {
     public String getNotifications()
     {
         String print = "[" + notifications;
-        print = print.substring(0,print.length()-1) + "]"; // remove the ',' in the end
+        print = print.substring(0,print.length()-2) + "]"; // remove the ' ,' in the end
         return print;
     }
 }

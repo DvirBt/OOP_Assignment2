@@ -7,10 +7,9 @@ package gym.management.Notification;
 import gym.customers.Client;
 import java.util.ArrayList;
 
-public class NotificationService {
+public class NotificationService implements Observer{
 
-    private ArrayList<Client> clients; // the list of the clients that will get the message
-    private String message; // the message
+    private ArrayList<Client> clients; // the clients of this observer
 
     // Constructors
     public NotificationService()
@@ -22,17 +21,26 @@ public class NotificationService {
     {
         this.clients = new ArrayList<>();
         this.clients.addAll(clients);
-        this.message = message;
-        update();
+        update(message);
     }
 
     /**
      * This function sends the message to all the clients in the list by using the update method that
      * each client has.
      */
-    public void update()
+    public void update(String message)
     {
         for (int i = 0; i < clients.size(); i++)
             clients.get(i).update(message);
+    }
+
+    public void add(Client client)
+    {
+        clients.add(client);
+    }
+
+    public ArrayList<Client> getClients()
+    {
+        return this.clients;
     }
 }

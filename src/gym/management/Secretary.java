@@ -32,7 +32,6 @@ public class Secretary extends Person {
     private static Secretary secretary = null;
     private int salary;
     private Gym gym = null;
-    private NotificationService notificationService;
     private final SessionFactory sessionFactory; // added
 
     // Private constructor
@@ -42,7 +41,6 @@ public class Secretary extends Person {
         this.salary = salary;
         this.gym = Gym.getInstance();
         this.sessionFactory = new SessionFactory();
-        this.notificationService = new NotificationService();
     }
 
     // Create a new instance
@@ -78,12 +76,13 @@ public class Secretary extends Person {
         if (client.getAge() < 18)
             throw new InvalidAgeException("Error: Client must be at least 18 years old to register");
 
-        Client newClient = new Client(client);
         // already exists
-        if (gym.getClients().contains(newClient))
-            throw new DuplicateClientException("Error: The client is already registered");
+        for (int i = 0; i < gym.getClients().size(); i++)
+            if (gym.getClients().get(i).getId() == client.getId())
+                throw new DuplicateClientException("Error: The client is already registered");
 
         // register
+        Client newClient = new Client(client);
         gym.addClient(newClient);
         String print = "Registered new client: " + client.getName();
         addToHistory(print);
@@ -158,37 +157,18 @@ public class Secretary extends Person {
     }
 
     /**
-     * This function checks if the client can be registered to a given session.
+     * This function checks if an error occurs if a client will be registered to a session.
      * @param client - the client who's trying to register to the lesson.
      * @param session - the session.
-     * @return an index. 0 - the client can be registered. Indexes 1-4 represents different exception to throw.
+     * @return true if at least one error occurs. Otherwise, returns false.
      */
     /*
         TODO:
-            1. Can an instructor be a client? probably not -> Exception
+            1. Can THIS instructor be a client? probably not -> Exception
      */
-    private int validRegisterToLesson(Client client, Session session)
-    {
-        // check if the session is full
-        if (session.getClients().size() >= session.getSessionType().getCapacity())
-            return 1;
 
-        // check if the client has enough money
-        if (client.getBalance() < session.getSessionType().getCost())
-            return 2;
-
-        // check forum
-        ForumType forum = session.getForumType();
-        if (!forum.getAudience().equals("All"))
-        {
-            if (forum.getAudience().equals("Seniors"))
-                if (!client.isSenior())
-                    return 3;
-
-            else if (!forum.getAudience().equals(client.getGender().getGender()))
-                return 4;
-        }
-
+    private boolean errors(Client client, Session session) {
+        boolean error = false;
         // check date
         LocalDate currentDate = LocalDate.now();
         String date = session.getDate();
@@ -196,10 +176,45 @@ public class Secretary extends Person {
         LocalDate sessionDate = LocalDate.parse(date, formatter);
 
         if (sessionDate.isBefore(currentDate)) // missed the session
-            return 5;
+        {
+            addToHistory("Failed registration: Session is not in the future");
+            error = true;
+        }
 
-        // Ok -> return 0
-        return 0;
+        // check forum
+        ForumType forum = session.getForumType();
+        if (!forum.getAudience().equals("All")) {
+            if (forum.getAudience().equals("Seniors"))
+            {
+                if (!client.isSenior())
+                {
+                    addToHistory("Failed registration: Client doesn't meet the age requirements for this session (Seniors)");
+                    error = true;
+                }
+            }
+
+            else if (!forum.getAudience().equals(client.getGender().getGender()))
+            {
+                addToHistory("Failed registration: Client's gender doesn't match the session's gender requirements");
+                error = true;
+            }
+        }
+
+        // check if the session is full
+        if (session.getClients().size() >= session.getSessionType().getCapacity())
+        {
+            addToHistory("Failed registration: No available spots for session");
+            error = true;
+        }
+
+        // check if the client has enough money
+        if (client.getBalance() < session.getSessionType().getCost())
+        {
+            addToHistory("Failed registration: Client doesn't have enough balance");
+            error = true;
+        }
+
+        return error;
     }
 
     /**
@@ -220,47 +235,16 @@ public class Secretary extends Person {
         if (!gym.getClients().contains(client) || client == null)
             throw new ClientNotRegisteredException("Error: The client is not registered with the gym and cannot enroll in lessons");
 
-        String print = "";
-        int exception = validRegisterToLesson(client, session);
-        if (exception != 0)
-        {
-            switch (exception)
-            {
-                case 1: // no spots left
-                    print = "Failed registration: No available spots for session";
-                    break;
-                    //throw new IllegalArgumentException("Failed registration: No available spots for session");
-                case 2: // not enough balance
-                    print = "Failed registration: Client doesn't have enough balance";
-                    break;
-                    //throw new IllegalArgumentException("Failed registration: Client doesn't have enough balance");
-                case 3: // session for seniors
-                    print = "Failed registration: Client doesn't meet the age requirements for this session (Seniors)";
-                    break;
-                    //throw new IllegalArgumentException("Failed registration: Client doesn't meet the age requirements for this session (Seniors)");
-                case 4: // opposite genders
-                    print = "Failed registration: Client's gender doesn't match the session's gender requirements";
-                    break;
-                    //throw new IllegalArgumentException("Failed registration: Client's gender doesn't match the session's gender requirements");
-                case 5: // session has passed
-                    print = "Failed registration: Session is not in the future";
-                    break;
-                    //throw new IllegalArgumentException("Failed registration: Session is not in the future");
-                default:
-            }
+        if (errors(client, session)) // if an error occurs
+            return; // return to the main
 
-            addToHistory(print);
-            //throw new IllegalArgumentException(print);
-            //System.out.println(print);
-        }
 
-        print = "Registered client: " + client.getName() + " to session: " + session.getSessionType().getName() + " on " + session.getDate().toString() + " for price: " + session.getSessionType().getCost();
+        String print = "Registered client: " + client.getName() + " to session: " + session.getSessionType().getName() + " on " + session.getDate().toString() + " for price: " + session.getSessionType().getCost();
         addToHistory(print);
         //Registered client: Nofar to session: Pilates on 2025-01-23T10:00 for price: 60
 
         // valid -> register to lesson
         session.addClient(client); // add the client
-        //session.setCurrentParticipants(session.getCurrentParticipants()+1); // reduce the capacity
         gym.setBalance(gym.getBalance() + session.getSessionType().getCost()); // add to the gym balance
         client.setBalance(client.getBalance() - session.getSessionType().getCost()); // reduce the cost from the client
     }
@@ -290,6 +274,7 @@ public class Secretary extends Person {
         currentSecretary();
         // pay the secretary
         gym.setBalance(gym.getBalance()-gym.getSecretary().salary);
+        gym.getSecretary().setBalance(gym.getSecretary().getBalance() + gym.getSecretary().getSalary());
 
         ArrayList<Session> needToPaySessions = gym.getPayBySessions();
         // pay by sessions
@@ -305,7 +290,7 @@ public class Secretary extends Person {
         addToHistory(print);
     }
 
-    // Observer
+    // Using Observer
 
     /**
      * This function notifies a given message to all the clients of the session.
@@ -315,7 +300,8 @@ public class Secretary extends Person {
     public void notify(Session session, String message)
     {
         currentSecretary();
-        notificationService = new NotificationService(session.getClients(), message);
+        //notificationService = new NotificationService(session.getClients(), message);
+        session.notifyClients(message);
         //session.notifyClients(message);
         String print = "A message was sent to everyone registered for session " + session.getSessionType().getName() + " on " + session.getDate() + " : " + message;
         addToHistory(print);
@@ -371,7 +357,7 @@ public class Secretary extends Person {
     public void notify(String message)
     {
         currentSecretary();
-        notificationService = new NotificationService(gym.getClients(), message);
+        new NotificationService(gym.getClients(), message);
         String print = "A message was sent to all gym clients: " + message;
         addToHistory(print);
     }
@@ -392,16 +378,9 @@ public class Secretary extends Person {
      */
     private void currentSecretary()
     {
-//        if (secretary != null)
-//            if (secretary.getId() != gym.getSecretary().getId())
-//                throw new NullPointerException("Error: Former secretaries are not permitted to perform actions");
-
-        //Secretary lastSecretary = gym.getLastSecretary();
         if (gym.getSecretary() != null)
             if (this.getId() != gym.getSecretary().getId())
                 throw new NullPointerException("Error: Former secretaries are not permitted to perform actions");
-
-        //if (lastSecretary != gym.getSecretary() && lastSecretary != null)
     }
 
     /**

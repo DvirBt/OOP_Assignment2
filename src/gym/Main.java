@@ -64,6 +64,7 @@ public class Main {
         Session s1 = gymSecretary.addSession(SessionType.Pilates, "23-01-2025 10:00", ForumType.All, i2);
         Session s2 = gymSecretary.addSession(SessionType.MachinePilates, "23-10-2024 08:00", ForumType.Female, i1);
         Session s3 = gymSecretary.addSession(SessionType.Pilates, "25-01-2025 09:30", ForumType.Seniors, i3);
+        // OG DATE of s4 01-01-2025 14:00
         Session s4 = gymSecretary.addSession(SessionType.ThaiBoxing, "01-01-2025 14:00", ForumType.All, i2);
         Session s5 = gymSecretary.addSession(SessionType.Ninja, "14-01-2025 20:00", ForumType.All, i3);
         Session s6 = gymSecretary.addSession(SessionType.ThaiBoxing, "14-01-2025 20:00", ForumType.Male, i1);

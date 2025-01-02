@@ -46,6 +46,6 @@ public class Instructor extends Person {
      */
     public void paySalary()
     {
-        setBalance(getBalance() + salary);
+        this.setBalance(this.getBalance() + salary);
     }
 }
