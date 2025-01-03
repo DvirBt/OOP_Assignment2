@@ -65,7 +65,7 @@ public class Main {
         Session s2 = gymSecretary.addSession(SessionType.MachinePilates, "23-10-2024 08:00", ForumType.Female, i1);
         Session s3 = gymSecretary.addSession(SessionType.Pilates, "25-01-2025 09:30", ForumType.Seniors, i3);
         // OG DATE of s4 01-01-2025 14:00
-        Session s4 = gymSecretary.addSession(SessionType.ThaiBoxing, "01-01-2025 14:00", ForumType.All, i2);
+        Session s4 = gymSecretary.addSession(SessionType.ThaiBoxing, "10-01-2025 14:00", ForumType.All, i2);
         Session s5 = gymSecretary.addSession(SessionType.Ninja, "14-01-2025 20:00", ForumType.All, i3);
         Session s6 = gymSecretary.addSession(SessionType.ThaiBoxing, "14-01-2025 20:00", ForumType.Male, i1);
 
@@ -105,7 +105,8 @@ public class Main {
         }
 
         gymSecretary.notify(s4, "The instructor will be a few minutes late for the session");
-        gymSecretary.notify("01-01-2025", "Heavy traffic reported around the gym today. Plan ahead to avoid missing your session!");
+        // OG DATE - "01-01-2025"
+        gymSecretary.notify("10-01-2025", "Heavy traffic reported around the gym today. Plan ahead to avoid missing your session!");
         gymSecretary.notify("Happy New Year to all our valued clients!");
 
         gymSecretary.paySalaries();

@@ -24,7 +24,6 @@ public class Gym {
     private ArrayList<Client> clients;
     private int balance = 0;
     private ArrayList<Instructor> instructors;
-    private ArrayList<Session> payBySessions;
     private ArrayList<Session> sessions;
     private ArrayList<String> history;
     private ArrayList<Secretary> formerSecretaries;
@@ -36,7 +35,6 @@ public class Gym {
         clients = new ArrayList<>();
         balance = 0;
         instructors = new ArrayList<>();
-        payBySessions = new ArrayList<>();
         sessions = new ArrayList<>();
         history = new ArrayList<>();
         formerSecretaries = new ArrayList<>();
@@ -111,17 +109,6 @@ public class Gym {
         instructors.add(instructor);
     }
 
-    public ArrayList<Session> getPayBySessions()
-    {
-        return this.payBySessions;
-    }
-
-    public void setPayBySessions(ArrayList<Session> payBySessions)
-    {
-        this.payBySessions = new ArrayList<>();
-        this.payBySessions.addAll(payBySessions);
-    }
-
     public ArrayList<Session> getSessions()
     {
         return this.sessions;
@@ -152,11 +139,6 @@ public class Gym {
     public void addClient(Client client)
     {
         this.clients.add(client);
-    }
-
-    public void addPayBySession(Session session)
-    {
-        this.payBySessions.add(session);
     }
 
     public void addSession(Session session)
@@ -216,8 +198,7 @@ public class Gym {
                     " | Participants: " + currentSession.getClients().size() + "/" + currentSession.getSessionType().getCapacity() + "\n";
         }
 
+        toString = toString.substring(0, toString.length()-1); // remove the "\n"
         return toString;
     }
-
-
 }

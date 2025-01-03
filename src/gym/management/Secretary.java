@@ -3,6 +3,7 @@ package gym.management;
 /**
  * This class represents the Secretary of the Gym.
  * Only the current Secretary is allowed to make actions and changes.
+ * Therefore, in each main method, the program checks if 'This' object is the current gym's secretary.
  */
 
 import gym.Exception.ClientNotRegisteredException;
@@ -20,11 +21,8 @@ import java.util.ArrayList;
 
 /*
     TODO:
-        1. Check design
         2. Add exception to instructor/client
         3. Change the exceptions to RunTime?
-        4. Check design of Singleton
-        5. Handle the try catch
  */
 public class Secretary extends Person {
 
@@ -32,7 +30,7 @@ public class Secretary extends Person {
     private static Secretary secretary = null;
     private int salary;
     private Gym gym = null;
-    private final SessionFactory sessionFactory; // added
+    private final SessionFactory sessionFactory = new SessionFactory();
 
     // Private constructor
     private Secretary(Person p, int salary)
@@ -40,7 +38,7 @@ public class Secretary extends Person {
         super(p);
         this.salary = salary;
         this.gym = Gym.getInstance();
-        this.sessionFactory = new SessionFactory();
+        // removed sessionFactory = new SessionFactory();
     }
 
     // Create a new instance
@@ -126,12 +124,8 @@ public class Secretary extends Person {
         // Factory
         SessionType type = sessionFactory.createSessionType(sessionType);
 
-        if (type == null) // EXCEPTION TRY CATCH
-            throw new NullPointerException("Session type is null!");
-
         Session session = new Session(type, date, forumType, instructor);
         gym.addSession(session);
-        gym.addPayBySession(session); // add session to needToPay sessions
         String print = "Created new session: " + type.getName() + " on " + date.toString() + " with instructor: " + instructor.getName();
         addToHistory(print);
         //Created new session: Pilates on 2025-01-23T10:00 with instructor: Yuval
@@ -267,7 +261,7 @@ public class Secretary extends Person {
     }
 
     /**
-     * This function pays all the workers of the Gym.
+     * This function pays all the employees of the Gym.
      */
     public void paySalaries()
     {
@@ -276,16 +270,15 @@ public class Secretary extends Person {
         gym.setBalance(gym.getBalance()-gym.getSecretary().salary);
         gym.getSecretary().setBalance(gym.getSecretary().getBalance() + gym.getSecretary().getSalary());
 
-        ArrayList<Session> needToPaySessions = gym.getPayBySessions();
+        ArrayList<Session> needToPaySessions = gym.getSessions();
         // pay by sessions
-        for (int i = 0; i < needToPaySessions.size(); i++)
+        for (int i = 0; i < gym.getSessions().size(); i++)
         {
             int paycheck = needToPaySessions.get(i).getInstructor().getSalary();
             needToPaySessions.get(i).getInstructor().paySalary(); // pay to the instructor
             gym.setBalance(gym.getBalance() - paycheck);
         }
 
-        gym.setPayBySessions(new ArrayList<>()); // all salaries are paid -> remove all the sessions from the list
         String print = "Salaries have been paid to all employees";
         addToHistory(print);
     }
@@ -343,7 +336,12 @@ public class Secretary extends Person {
         if (!dateSessions.isEmpty())
         {
             for (int i = 0; i < dateSessions.size(); i++)
-                notify(dateSessions.get(i), message);
+            {
+                //notify(dateSessions.get(i), message);
+                dateSessions.get(i).notifyClients(message);
+                // TODO:
+                    // what if a client is in more than one session at this day?
+            }
         }
 
         String print = "A message was sent to everyone registered for a session on " + date + " : " + message;
