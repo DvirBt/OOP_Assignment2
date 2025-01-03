@@ -17,8 +17,7 @@ public class Session {
     private String date;
     private ForumType forumType;
     private Instructor instructor;
-    //private ArrayList<Client> clients;
-    //private Observer notificationService;
+
     private NotificationService observer;
 
     // Constructor
@@ -28,8 +27,6 @@ public class Session {
         this.date = date;
         this.forumType = forumType;
         this.instructor = instructor;
-        //clients = new ArrayList<>();
-        //notificationService = new NotificationService();
         observer = new NotificationService();
 
     }
@@ -75,18 +72,8 @@ public class Session {
 
     public ArrayList<Client> getClients()
     {
-        //         return notificationService.getClients();
         return observer.getClients();
     }
-
-    /*
-    public void setClients(ArrayList<Client> clients)
-    {
-        this.clients = new ArrayList<>();
-        this.clients.addAll(clients);
-    }
-
-     */
 
     /**
      * This function adds a client to the list of clients.
@@ -94,8 +81,6 @@ public class Session {
      */
     public void addClient(Client client)
     {
-        //this.clients.add(client);
-        //notificationService.add(client);
         observer.add(client);
     }
 
@@ -103,10 +88,8 @@ public class Session {
      * This function sends a given message to the clients of this session.
      * @param message - a String message.
      */
-
     public void notifyClients(String message)
     {
-        //notificationService.update(message);
         observer.update(message);
     }
 

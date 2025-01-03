@@ -3,6 +3,7 @@ package gym.customers;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
 
 /**
  * This class represent a Person with basic properties.
@@ -13,31 +14,34 @@ public class Person {
     private static int ID = 1111;
     private int id = ID++;
     private String name;
-    private int balance;
+    private final Bank bankAccount; // a bank account
     private final Gender gender;
     private final String birthday;
 
     public Person(String name, int balance, Gender gender, String birthday)
     {
         this.name = name;
-        this.balance = balance;
+        this.bankAccount = new Bank(id, balance);
         this.gender = gender;
         this.birthday = birthday;
     }
 
-    public Person(int id, String name, int balance, Gender gender, String birthday)
+    public Person(int id, String name, Bank bankAccount, Gender gender, String birthday)
     {
         this.id = id;
         this.name = name;
-        this.balance = balance;
+        this.bankAccount = bankAccount;
         this.gender = gender;
         this.birthday = birthday;
     }
 
     public Person(Person p)
     {
-        this(p.id, p.name, p.balance, p.gender, p.birthday);
+        this(p.id, p.name, p.bankAccount, p.gender, p.birthday);
     }
+
+
+    // Getters and Setters
 
     public int getId()
     {
@@ -53,16 +57,6 @@ public class Person {
         this.name = name;
     }
 
-    public int getBalance()
-    {
-        return this.balance;
-    }
-
-    public void setBalance(int balance)
-    {
-        this.balance = balance;
-    }
-
     public Gender getGender()
     {
         return this.gender;
@@ -71,6 +65,21 @@ public class Person {
     public String getBirthday()
     {
         return this.birthday;
+    }
+
+    public Bank getBankAccount()
+    {
+        return this.bankAccount;
+    }
+
+    public int getBankAccountBalance()
+    {
+        return this.bankAccount.getBalanceByID(id);
+    }
+
+    public void setBankAccountBalance(int balance)
+    {
+        this.bankAccount.setBalanceByID(id, balance);
     }
 
     /**
@@ -89,5 +98,30 @@ public class Person {
             age += 1;
 
         return age;
+    }
+
+    /**
+     * A nested static class Bank.
+     * This class is using as a connector between a Person balance to Client/Instructor/Secretary balance by his ID
+     * by using a HasMap data structure.
+     */
+    public static class Bank
+    {
+        HashMap<Integer, Integer> bank = new HashMap<>();
+
+        private Bank(int id, int balance)
+        {
+            bank.put(id, balance);
+        }
+
+        private int getBalanceByID(int id)
+        {
+            return bank.get(id);
+        }
+
+        private void setBalanceByID(int id, int balance)
+        {
+            bank.put(id, balance);
+        }
     }
 }

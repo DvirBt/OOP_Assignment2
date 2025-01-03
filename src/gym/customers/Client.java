@@ -6,17 +6,16 @@ package gym.customers;
 public class Client extends Person {
 
     private String notifications;
-    public Client(int id, String name, int balance, Gender gender, String birthday)
+    public Client(int id, String name, Bank bankAccount, Gender gender, String birthday)
     {
-        super(id, name, balance, gender, birthday);
+        super(id, name, bankAccount, gender, birthday);
         notifications = "";
     }
 
     public Client(Person person)
     {
-        this(person.getId(), person.getName(), person.getBalance(), person.getGender(), person.getBirthday());
+        this(person.getId(), person.getName(), person.getBankAccount(), person.getGender(), person.getBirthday());
     }
-
 
     /**
      * This function returns the client current age status.

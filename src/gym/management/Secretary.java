@@ -19,11 +19,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-/*
-    TODO:
-        2. Add exception to instructor/client
-        3. Change the exceptions to RunTime?
- */
 public class Secretary extends Person {
 
     // Singleton and data members
@@ -38,7 +33,6 @@ public class Secretary extends Person {
         super(p);
         this.salary = salary;
         this.gym = Gym.getInstance();
-        // removed sessionFactory = new SessionFactory();
     }
 
     // Create a new instance
@@ -126,11 +120,25 @@ public class Secretary extends Person {
 
         Session session = new Session(type, date, forumType, instructor);
         gym.addSession(session);
-        String print = "Created new session: " + type.getName() + " on " + date.toString() + " with instructor: " + instructor.getName();
+        String print = "Created new session: " + type.getName() + " on " + printDate(date) + " with instructor: " + instructor.getName();
         addToHistory(print);
-        //Created new session: Pilates on 2025-01-23T10:00 with instructor: Yuval
 
         return session;
+    }
+
+    /**
+     * This function gets a String and returns it in a different format.
+     * @param date - the String representing a date.
+     * @return this date in a different format (YEAR-MONTH-DAYTHOURS:MINUTES)
+     */
+    private String printDate(String date)
+    {
+        String day = date.substring(0,2);
+        String month = date.substring(3,6);
+        String year = date.substring(6,10) + "-";
+        String time = date.substring(11);
+
+        return year+month+day+"T"+time;
     }
 
     /**
@@ -155,10 +163,6 @@ public class Secretary extends Person {
      * @param client - the client who's trying to register to the lesson.
      * @param session - the session.
      * @return true if at least one error occurs. Otherwise, returns false.
-     */
-    /*
-        TODO:
-            1. Can THIS instructor be a client? probably not -> Exception
      */
 
     private boolean errors(Client client, Session session) {
@@ -202,7 +206,7 @@ public class Secretary extends Person {
         }
 
         // check if the client has enough money
-        if (client.getBalance() < session.getSessionType().getCost())
+        if (client.getBankAccountBalance() < session.getSessionType().getCost())
         {
             addToHistory("Failed registration: Client doesn't have enough balance");
             error = true;
@@ -233,14 +237,13 @@ public class Secretary extends Person {
             return; // return to the main
 
 
-        String print = "Registered client: " + client.getName() + " to session: " + session.getSessionType().getName() + " on " + session.getDate().toString() + " for price: " + session.getSessionType().getCost();
+        String print = "Registered client: " + client.getName() + " to session: " + session.getSessionType().getName() + " on " + printDate(session.getDate()) + " for price: " + session.getSessionType().getCost();
         addToHistory(print);
-        //Registered client: Nofar to session: Pilates on 2025-01-23T10:00 for price: 60
 
         // valid -> register to lesson
         session.addClient(client); // add the client
         gym.setBalance(gym.getBalance() + session.getSessionType().getCost()); // add to the gym balance
-        client.setBalance(client.getBalance() - session.getSessionType().getCost()); // reduce the cost from the client
+        client.setBankAccountBalance(client.getBankAccountBalance() - session.getSessionType().getCost()); // reduce the cost from the client
     }
 
     /**
@@ -268,7 +271,7 @@ public class Secretary extends Person {
         currentSecretary();
         // pay the secretary
         gym.setBalance(gym.getBalance()-gym.getSecretary().salary);
-        gym.getSecretary().setBalance(gym.getSecretary().getBalance() + gym.getSecretary().getSalary());
+        gym.getSecretary().setBankAccountBalance(gym.getSecretary().getBankAccountBalance() + gym.getSecretary().getSalary());
 
         ArrayList<Session> needToPaySessions = gym.getSessions();
         // pay by sessions
@@ -293,12 +296,9 @@ public class Secretary extends Person {
     public void notify(Session session, String message)
     {
         currentSecretary();
-        //notificationService = new NotificationService(session.getClients(), message);
         session.notifyClients(message);
-        //session.notifyClients(message);
-        String print = "A message was sent to everyone registered for session " + session.getSessionType().getName() + " on " + session.getDate() + " : " + message;
+        String print = "A message was sent to everyone registered for session " + session.getSessionType().getName() + " on " + printDate(session.getDate()) + " : " + message;
         addToHistory(print);
-        //notificationService = new NotificationService(session.getClients(), message);
     }
 
     /**
@@ -336,15 +336,16 @@ public class Secretary extends Person {
         if (!dateSessions.isEmpty())
         {
             for (int i = 0; i < dateSessions.size(); i++)
-            {
-                //notify(dateSessions.get(i), message);
                 dateSessions.get(i).notifyClients(message);
-                // TODO:
-                    // what if a client is in more than one session at this day?
-            }
         }
 
-        String print = "A message was sent to everyone registered for a session on " + date + " : " + message;
+        String newDate, day, month, year;
+        day = date.substring(0,2);
+        month = date.substring(3,6);
+        year = date.substring(6,10) + "-";
+        newDate = year+month+day;
+
+        String print = "A message was sent to everyone registered for a session on " + newDate+ " : " + message;
         addToHistory(print);
     }
 

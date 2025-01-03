@@ -146,6 +146,10 @@ public class Gym {
         sessions.add(session);
     }
 
+    /**
+     * This function returns all the data of the Gym as a String.
+     * @return a String of all the Gym's data.
+     */
     public String toString()
     {
         String toString = "";
@@ -153,7 +157,7 @@ public class Gym {
         Secretary currentSecretary = gym.getSecretary();
         toString += "Gym Secretary: ID: " + secretary.getId() + " | Name: " + currentSecretary.getName() + " | Gender: " + currentSecretary.getGender().name() +
                 " | Birthday: " + currentSecretary.getBirthday() + " | Age: " + currentSecretary.getAge() +
-                " | Balance: " + currentSecretary.getBalance() + " | Role: Secretary | Salary per Month: " + currentSecretary.getSalary() + "\n";
+                " | Balance: " + currentSecretary.getBankAccountBalance() + " | Role: Secretary | Salary per Month: " + currentSecretary.getSalary() + "\n";
         toString += "Gym Balance: " + gym.balance + "\n\n";
         toString += "Clients Data: \n";
 
@@ -162,7 +166,7 @@ public class Gym {
             Client currentClient = clients.get(i);
             toString += "ID: " + currentClient.getId() +" | Name: " + currentClient.getName() + " | Gender: " + currentClient.getGender().name() +
                     " | Birthday: " + currentClient.getBirthday() + " | Age: " + currentClient.getAge() +
-                    " | Balance: " + currentClient.getBalance() + "\n";
+                    " | Balance: " + currentClient.getBankAccountBalance() + "\n";
         }
 
         toString += "\nEmployees Data:\n";
@@ -171,7 +175,7 @@ public class Gym {
             Instructor currentInstructor = instructors.get(i);
             toString += "ID: " + currentInstructor.getId() + " | Name: " + currentInstructor.getName() + " | Gender: " + currentInstructor.getGender().name() +
                     " | Birthday: " + currentInstructor.getBirthday() + " | Age: " + currentInstructor.getAge() +
-                    " | Balance: " + currentInstructor.getBalance() + " | Role: Instructor | Salary per Hour: " + currentInstructor.getSalary() +
+                    " | Balance: " + currentInstructor.getBankAccountBalance() + " | Role: Instructor | Salary per Hour: " + currentInstructor.getSalary() +
                     " | Certified Classes: ";
                     for (int j = 0; j < currentInstructor.getTypes().size(); j++)
                     {
@@ -185,10 +189,9 @@ public class Gym {
         // add secretary
         toString += "ID: " + secretary.getId() + " | Name: " + currentSecretary.getName() + " | Gender: " + currentSecretary.getGender().name() +
                 " | Birthday: " + currentSecretary.getBirthday() + " | Age: " + currentSecretary.getAge() +
-                " | Balance: " + currentSecretary.getBalance() + " | Role: Secretary | Salary per Month: " + currentSecretary.getSalary() + "\n";
+                " | Balance: " + currentSecretary.getBankAccountBalance() + " | Role: Secretary | Salary per Month: " + currentSecretary.getSalary() + "\n";
 
 
-        // Session Type: Pilates | Date: 23-01-2025 10:00 | Forum: All | Instructor: Yuval | Participants: 1/30
         toString += "\nSessions Data:\n";
         for (int i = 0; i < sessions.size(); i++)
         {
